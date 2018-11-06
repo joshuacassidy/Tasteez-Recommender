@@ -52,5 +52,6 @@ def hello_world():
 def test():
     return Response(json.dumps({'Message': "Hello"}), mimetype='application/json', status='200')
 
-app.run(debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
 # perhaps use kNN but map -1:1 0:50 and 1:100 to make values all positive and ridiculously big to score them all this way we can be pure and use euclidean distance enum pattern oooo
