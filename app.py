@@ -46,7 +46,7 @@ def hello_world():
 
     
 
-    return Response(json.dumps({'Message': sorted(mealData, key=lambda k: k['weight'], reverse=True) }), mimetype='application/json', status='200')
+    return Response(json.dumps(sorted(mealData, key=lambda k: k['weight'], reverse=True)), mimetype='application/json', status='200')
 
 @app.route('/', methods=['GET'])
 def test():
