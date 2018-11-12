@@ -62,7 +62,7 @@ def hello_world():
     
 
     return Response(json.dumps(
-        sorted(mealData, key=lambda k: k['weight'], reverse=True)
+        sorted(mealData, key=lambda k: k['weight'], reverse=True)[:int(len(mealData)/4)]
         ), mimetype='application/json', status='200')
 
 @app.route('/', methods=['GET'])
