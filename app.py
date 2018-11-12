@@ -19,11 +19,10 @@ def hello_world():
 
     intersection = [i for i in likeData if i["name"] in intersectionOfNames]
     
-    # for i in intersection:
-    #     if i['like_value'] == '1':
-    #         i['like_value'] = 100
-    #     else:
-    #         i['like_value'] = 1
+    for i in intersection:
+        if i['like_value'] == '1':
+            i['like_value'] = 3
+
     
     ingredientsScores = {}
     
@@ -43,6 +42,8 @@ def hello_world():
     for i in ingredientsScoresFlattened:
         if i['likes'] < 0:
             i['likes'] = 1
+        else:
+            i['likes'] = i['likes'] * 3
 
     print(ingredientsScoresFlattened)
     blah = []
@@ -62,7 +63,7 @@ def hello_world():
     
 
     return Response(json.dumps(
-        sorted(mealData, key=lambda k: k['weight'], reverse=True)[:int(len(mealData)/4)]
+        sorted(mealData, key=lambda k: k['weight'], reverse=True)[:max(int(len(mealData)/4), 20)]
         ), mimetype='application/json', status='200')
 
 @app.route('/', methods=['GET'])
