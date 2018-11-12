@@ -42,8 +42,6 @@ def hello_world():
     for i in ingredientsScoresFlattened:
         if i['likes'] < 0:
             i['likes'] = 1
-        else:
-            i['likes'] = i['likes'] * 3
 
     print(ingredientsScoresFlattened)
     blah = []
