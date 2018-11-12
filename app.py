@@ -7,18 +7,28 @@ import math
 def hello_world():
     likeData = json.loads(request.data)["liked"]
     mealData = json.loads(request.data)["meals"]
+    print(mealData)
+
     # likeData = [{'like_value': '1', 'name': 'Chicken'}, {'like_value': '-1', 'name': 'Beef'}, {'like_value': '1', 'name': 'oil'}, {'like_value': '-1', 'name': 'oil'}, {'like_value': '1', 'name': 'Chicken'}, {'like_value': '-1', 'name': 'Beef'}, {'like_value': '1', 'name': 'Chicken'}, {'like_value': '-1', 'name': 'Beef'}, {'like_value': '1', 'name': 'Potatoes'}]
     likes = [i['name'] for i in likeData if i["like_value"] == "1"]
     dislikes = [i['name'] for i in likeData if i["like_value"] == "-1"]
-
     likesInterDislikes = [i for i in likes if i not in dislikes] 
     dislikesInterLikes = [i for i in dislikes if i not in likes] 
 
     intersectionOfNames = likesInterDislikes + dislikesInterLikes
 
     intersection = [i for i in likeData if i["name"] in intersectionOfNames]
-
+    
+    for i in intersection:
+        if i['like_value'] == '1':
+            i['like_value'] = 100
+        else:
+            i['like_value'] = 1
+    
     ingredientsScores = {}
+    
+    print(intersection)
+
     for i in intersection:
         if i['name'] in ingredientsScores:
             ingredientsScores[i['name']]['likes']+= int(i["like_value"])
@@ -27,8 +37,10 @@ def hello_world():
 
     ingredientsScoresFlattened = [i for i in ingredientsScores.values()]
     # print(ingredientsScoresFlattened)
-
     
+    # print(intersection)
+    
+
     blah = []
     for meal in mealData:
         ingredients = meal['ingredient']
@@ -38,15 +50,17 @@ def hello_world():
         iSum = 0
         for i in ingredients:
             if i in itm:
-                print(itm[i]['likes'])
-                iSum+= (abs(itm[i]['likes']) * itm[i]['likes'])
+                # print(itm[i]['likes'])
+                iSum+= (itm[i]['likes'] - 1) ** 2
             else:
                 iSum +=0
-            meal['weight'] = iSum
+            meal['weight'] = math.sqrt(iSum)
 
     
 
-    return Response(json.dumps(sorted(mealData, key=lambda k: k['weight'], reverse=True)), mimetype='application/json', status='200')
+    return Response(json.dumps(
+        sorted(mealData, key=lambda k: k['weight'], reverse=True)
+        ), mimetype='application/json', status='200')
 
 @app.route('/', methods=['GET'])
 def test():
