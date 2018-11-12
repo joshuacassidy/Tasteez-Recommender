@@ -19,11 +19,11 @@ def hello_world():
 
     intersection = [i for i in likeData if i["name"] in intersectionOfNames]
     
-    for i in intersection:
-        if i['like_value'] == '1':
-            i['like_value'] = 100
-        else:
-            i['like_value'] = 1
+    # for i in intersection:
+    #     if i['like_value'] == '1':
+    #         i['like_value'] = 100
+    #     else:
+    #         i['like_value'] = 1
     
     ingredientsScores = {}
     
@@ -40,7 +40,11 @@ def hello_world():
     
     # print(intersection)
     
+    for i in ingredientsScoresFlattened:
+        if i['likes'] < 0:
+            i['likes'] = 1
 
+    print(ingredientsScoresFlattened)
     blah = []
     for meal in mealData:
         ingredients = meal['ingredient']
@@ -53,9 +57,8 @@ def hello_world():
                 # print(itm[i]['likes'])
                 iSum+= (itm[i]['likes'] - 1) ** 2
             else:
-                iSum +=0
-            meal['weight'] = math.sqrt(iSum)
-
+                iSum = iSum + 1
+        meal['weight'] = math.sqrt(iSum)
     
 
     return Response(json.dumps(
