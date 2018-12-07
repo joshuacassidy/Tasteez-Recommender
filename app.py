@@ -4,10 +4,17 @@ app = Flask(__name__)
 import math
 
 @app.route('/', methods=['POST'])
-def hello_world():
-    likeData = json.loads(request.data)["liked"]
-    mealData = json.loads(request.data)["meals"]
-
+def recommendRecipes():
+    try:
+        likeData = json.loads(request.data)["liked"]
+    except:
+        return Response(json.dumps({'message': "Like data is a required to make recommendations!"}), mimetype='application/json', status='400')
+    
+    try:
+        mealData = json.loads(request.data)["meals"]
+    except:
+        return Response(json.dumps({'message': "Recipe data is a required to make recommendations!"}), mimetype='application/json', status='400')
+    
     likes = [i['name'] for i in likeData if i["like_value"] == "1"]
     dislikes = [i['name'] for i in likeData if i["like_value"] == "-1"]
     uniqueLikes = [i for i in likes if i not in dislikes] 
@@ -50,10 +57,6 @@ def hello_world():
     return Response(json.dumps(
         sorted(mealData, key=lambda k: k['weight'], reverse=True)[:max(int(len(mealData)/4), 20)]
         ), mimetype='application/json', status='200')
-
-@app.route('/', methods=['GET'])
-def test():
-    return Response(json.dumps({'Message': "Hello"}), mimetype='application/json', status='200')
 
 if __name__ == '__main__':
     app.run(debug=True)
